@@ -42,7 +42,14 @@ func (h *Hand) GetBestHand (board Board) {
 }
 
 func ParseFiveCards (cards [5]Card) ParsedFiveCards {
-	// todo test QF
+	
+	flushValue, flushKickers := testFlush(cards)
+	straightValue, straightKickers := testStraight(cards)
+	
+	if flushValue != 0 && straightValue != 0 {
+		fmt.Println("Has Straight Flush : %d", straightValue)
+		return ParsedFiveCards{RANK_STRAIGHT_FLUSH, straightValue, straightKickers}
+	}
 	
 	value, kickers := testFourOfAKind(cards)
 	if value != 0 {
@@ -50,24 +57,20 @@ func ParseFiveCards (cards [5]Card) ParsedFiveCards {
 		return ParsedFiveCards{RANK_FOUR_OF_A_KIND, value, kickers}
 	}
 
-	value, kickers = testFourOfAKind(cards)
+	value, kickers = testFullHouse(cards)
 	if value != 0 {
 		fmt.Println("Has Full House : %d", value)
 		return ParsedFiveCards{RANK_FULL_HOUSE, value, kickers}
 	}
 
-	// todo test F
-	value, kickers = testFlush(cards)
-	if value != 0 {
-		fmt.Println("Has Flush : %d", value)
-		return ParsedFiveCards{RANK_THREE_OF_KIND, value, kickers}
+	if flushValue != 0 {
+		fmt.Println("Has Flush : %d", flushValue)
+		return ParsedFiveCards{RANK_FLUSH, flushValue, flushKickers}
 	}
 
-	// todo test S
-	value, kickers = testStraight(cards)
-	if value != 0 {
-		fmt.Println("Has Straight : %d", value)
-		return ParsedFiveCards{RANK_STRAIGHT, value, kickers}
+	if straightValue != 0 {
+		fmt.Println("Has Straight : %d", straightValue)
+		return ParsedFiveCards{RANK_STRAIGHT, straightValue, straightKickers}
 	}
 
 	value, kickers = testThreeOfAKind(cards)
@@ -77,6 +80,11 @@ func ParseFiveCards (cards [5]Card) ParsedFiveCards {
 	}
 
 	// todo test DP
+	value, kickers = testDoublePair(cards)
+	if value != 0 {
+		fmt.Println("Has Three Of a Kind : %d", value)
+		return ParsedFiveCards{RANK_THREE_OF_KIND, value, kickers}
+	}
 
 	// todo test P
 
@@ -94,11 +102,11 @@ func testFourOfAKind(cards [5]Card) (int, []int) {
 
 	for value, count := range stack {
 		if count == 4 {
-			fokValue = value
+			fokValue = value+2
 			continue
 		}
 
-		kicker = value
+		kicker = value+2
 	}
 
 	return fokValue, []int{kicker}
@@ -115,18 +123,20 @@ func testFullHouse(cards [5]Card) (int, []int) {
 
 	for value, count := range stack {
 		if count == 3 {
-			tokValue = value
+			tokValue = value+2
 			continue
 		}
 
-		kickers = append(kickers, value)
+		if count == 2 {
+			kickers = append(kickers, value+2, value+2)
+		}
 	}
 
 	if tokValue == 0 {
 		return 0, []int{}
 	}
-
-	if kickers[0] != kickers[1] {
+	
+	if len(kickers) != 2 {
 		return 0, []int{}
 	}
 
@@ -135,11 +145,9 @@ func testFullHouse(cards [5]Card) (int, []int) {
 
 func testFlush(cards [5]Card) (int, []int) {
 	color := cards[0].Color
-	value := cards[1].Value
+	value := cards[0].Value
 
-	//fmt.Println(0, color, cards)
 	for i:= 1; i<5; i++ {
-		//fmt.Println(i, cards[i].Color)
 		if cards[i].Color != color {
 			return 0, []int{}
 		}
@@ -173,7 +181,7 @@ func testStraight(cards [5]Card) (int, []int) {
 			return 0, []int{}
 		}
 
-		highCard = value
+		highCard = value + 2
 		tick++
 
 		if tick == 5 {
@@ -195,11 +203,18 @@ func testThreeOfAKind(cards [5]Card) (int, []int) {
 
 	for value, count := range stack {
 		if count == 3 {
-			tokValue = value
+			tokValue = value+2
 			continue
 		}
 
-		kickers = append(kickers, value)
+		if count == 2 {
+			// it's a full house
+			return 0, []int{}
+		}
+
+		if count == 1 {
+			kickers = append(kickers, value+2)
+		}
 	}
 
 	if tokValue == 0 {
@@ -212,4 +227,31 @@ func testThreeOfAKind(cards [5]Card) (int, []int) {
 	}
 
 	return tokValue, kickers
+}
+
+func testPairs(cards [5]Card) ([]int, []int) {
+	stack := make([]int, 13, 13)
+	for _, card := range cards {
+		stack[card.Value - 2]++
+	}
+
+	pairs := make([]int, 0)
+	kickers := make([]int, 0)
+
+	for value, count := range stack {
+		if count > 2 {
+			return 0, []int{}
+			continue
+		}
+
+		if count == 2 {
+			pairs = append(pairs, value+2)
+		}
+
+		if count == 1 {
+			kickers = append(kickers, value+2)
+		}
+	}
+
+	return pairs, kickers
 }

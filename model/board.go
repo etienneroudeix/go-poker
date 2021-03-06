@@ -1,5 +1,9 @@
 package Model
 
+import (
+	"fmt"
+)
+
 type Board struct {
     Flop [3]Card
 	Turn Card
@@ -15,11 +19,7 @@ func (b *Board) GetAllTriples () [][3]Card {
 
 	for i := 0; i < len(cards); i++ {
 		for j := 0; j < i; j++ {
-			for k := 0; k < len(cards); k++ {
-				if k == j || k == i {
-					continue
-				}
-
+			for k := i+1; k < len(cards); k++ {
 				combinaisons = append(combinaisons, [3]Card{
 					cards[i],
 					cards[j],
@@ -27,6 +27,10 @@ func (b *Board) GetAllTriples () [][3]Card {
 				})
 			}	
 		}
+	}
+
+	if len(combinaisons) != 10 {
+		panic(fmt.Sprintf("Bad parse in GetAllTriples : %d found", len(combinaisons)))
 	}
 
 	return combinaisons
