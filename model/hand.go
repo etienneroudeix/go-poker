@@ -2,6 +2,7 @@ package Model
 
 import(
 	"fmt"
+	"sort"
 )
 
 const RANK_NOTHING = 0
@@ -25,9 +26,14 @@ type ParsedFiveCards struct {
 	Kickers []int
 }
 
-func (h *Hand) GetBestHand (board Board) {
+type ParsedHand struct {
+	Hand Hand
+	FiveCards ParsedFiveCards
+}
+
+func (h *Hand) GetBestHand (board Board) ParsedHand {
 	
-	//hands := []ParsedHand{}
+	hands := []ParsedFiveCards{}
 	
 	triples := board.GetAllTriples();
 	for _, triple := range triples {
@@ -35,10 +41,37 @@ func (h *Hand) GetBestHand (board Board) {
 		cards = append(cards, triple[0:3]...)
 		var fiveCards [5]Card
 		copy(fiveCards[:], cards)
-		ParseFiveCards(fiveCards)
-
-		//hands = append(hands, ParsedHand{h, rank, value, kickers})
+		hands = append(hands, ParseFiveCards(fiveCards))
 	}
+
+	sort.SliceStable(hands, func(i, j int) bool {
+		return hands[i].Compare(hands[j])
+	})
+
+	fmt.Println(h.Player, "Best Hand : ", hands[0])	
+
+	return ParsedHand{*h, hands[0]}
+}
+
+func (fiveCards *ParsedFiveCards) Compare (otherFiveCards ParsedFiveCards) bool {
+	if fiveCards.Rank != otherFiveCards.Rank {
+		return fiveCards.Rank > otherFiveCards.Rank
+	}
+
+	if fiveCards.Value != otherFiveCards.Value {
+		return fiveCards.Value > otherFiveCards.Value
+	}
+
+	for k := range fiveCards.Kickers {
+		if fiveCards.Kickers[k] == otherFiveCards.Kickers[k] {
+			continue
+		}
+
+		return fiveCards.Kickers[k] > otherFiveCards.Kickers[k]
+	}
+
+	// hands are similar (color variated)
+	return true
 }
 
 func ParseFiveCards (cards [5]Card) ParsedFiveCards {
@@ -121,12 +154,12 @@ func ParseFiveCards (cards [5]Card) ParsedFiveCards {
 
 	if len(pairs) == 2 {
 		fmt.Println("Has Two Pairs : %d", pairs[0], []int{pairs[1], kickers[0]})
-		return ParsedFiveCards{RANK_THREE_OF_KIND, pairs[0], []int{pairs[1], kickers[0]}}
+		return ParsedFiveCards{RANK_DOUBLE_PAIR, pairs[0], []int{pairs[1], kickers[0]}}
 	}
 
 	if len(pairs) == 1 {
 		fmt.Println("Has Pair : %d", pairs[0], kickers)
-		return ParsedFiveCards{RANK_THREE_OF_KIND, pairs[0], kickers}
+		return ParsedFiveCards{RANK_PAIR, pairs[0], kickers}
 	}
 
 	fmt.Println("Has Nothing : %d", kickers[0], kickers)
