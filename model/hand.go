@@ -123,46 +123,46 @@ func ParseFiveCards (cards [5]Card) ParsedFiveCards {
 	flushValue := testFlush(cards)
 	
 	if flushValue != 0 && hasStraight {
-		fmt.Println("Has Straight Flush : %d", flushValue, kickers)
+		fmt.Println("Has Straight Flush", flushValue, kickers)
 		return ParsedFiveCards{RANK_STRAIGHT_FLUSH, flushValue, kickers}
 	}
 	
 	if fok != 0 {
-		fmt.Println("Has Four Of a Kind : %d", fok, kickers)
+		fmt.Println("Has Four Of a Kind", fok, kickers)
 		return ParsedFiveCards{RANK_FOUR_OF_A_KIND, fok, kickers}
 	}
 
 	if tok != 0 && len(pairs) == 1 {
-		fmt.Println("Has Full House : %d", tok, []int{pairs[0],pairs[0]})
+		fmt.Println("Has Full House", tok, []int{pairs[0],pairs[0]})
 		return ParsedFiveCards{RANK_FULL_HOUSE, tok, []int{pairs[0],pairs[0]}}
 	}
 
 	if flushValue != 0 {
-		fmt.Println("Has Flush : %d", flushValue, kickers)
+		fmt.Println("Has Flush", flushValue, kickers)
 		return ParsedFiveCards{RANK_FLUSH, flushValue, kickers}
 	}
 
 	if hasStraight {
-		fmt.Println("Has Straight : %d", straightHighCard, kickers)
+		fmt.Println("Has Straight", straightHighCard, kickers)
 		return ParsedFiveCards{RANK_STRAIGHT, straightHighCard, kickers}
 	}
 
 	if tok != 0 {
-		fmt.Println("Has Three Of a Kind : %d", tok, kickers)
+		fmt.Println("Has Three Of a Kind", tok, kickers)
 		return ParsedFiveCards{RANK_THREE_OF_KIND, tok, kickers}
 	}
 
 	if len(pairs) == 2 {
-		fmt.Println("Has Two Pairs : %d", pairs[0], []int{pairs[1], kickers[0]})
+		fmt.Println("Has Two Pairs", pairs[0], []int{pairs[1], kickers[0]})
 		return ParsedFiveCards{RANK_DOUBLE_PAIR, pairs[0], []int{pairs[1], kickers[0]}}
 	}
 
 	if len(pairs) == 1 {
-		fmt.Println("Has Pair : %d", pairs[0], kickers)
+		fmt.Println("Has Pair", pairs[0], kickers)
 		return ParsedFiveCards{RANK_PAIR, pairs[0], kickers}
 	}
 
-	fmt.Println("Has Nothing : %d", kickers[0], kickers)
+	fmt.Println("Has Nothing", kickers[0], kickers)
 	return ParsedFiveCards{RANK_NOTHING, kickers[0], kickers}
 }
 

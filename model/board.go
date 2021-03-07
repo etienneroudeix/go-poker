@@ -10,6 +10,14 @@ type Board struct {
 	River Card
 }
 
+func (b *Board) GetAll () []Card {
+	cards := b.Flop[0:3]
+	cards = append(cards, b.Turn)
+	cards = append(cards, b.River)
+
+	return cards
+}
+
 func (b *Board) GetAllTriples () [][3]Card {
 	cards := b.Flop[0:3]
 	cards = append(cards, b.Turn)

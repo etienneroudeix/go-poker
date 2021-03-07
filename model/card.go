@@ -5,8 +5,8 @@ import(
 )
 
 const COLOR_HEART = 0
-const COLOR_CLOVER = 2
-const COLOR_DIAMOND = 3
+const COLOR_CLOVER = 1
+const COLOR_DIAMOND = 2
 const COLOR_SPADE = 3
 
 const VALUE_ACE = 14
@@ -30,4 +30,8 @@ func MakeCard(color int, value int) Card {
 	}
 	
     return Card{color, value}
+}
+
+func (card *Card) GetDeckValue () int {
+	return card.Value -2 + card.Color * 13
 }

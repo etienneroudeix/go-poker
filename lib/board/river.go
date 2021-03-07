@@ -10,8 +10,10 @@ var (
 )
 
 func ResolveRiver (board Model.Board, hands []Model.Hand) {
+	//checkIntegrity(board, hands)
+	
 	fmt.Println("Resolving")
-
+	
 	bestHands := []Model.ParsedHand{}
 
 	for _, hand := range hands {
@@ -24,5 +26,5 @@ func ResolveRiver (board Model.Board, hands []Model.Hand) {
 		return bestHands[i].FiveCards.Compare(bestHands[j].FiveCards)
 	})
 
-	fmt.Println("Winner : ", bestHands[0].Hand.Player)
+	fmt.Println("Winner : ", bestHands[0].Hand.Player, "with", bestHands[0].FiveCards)
 }
