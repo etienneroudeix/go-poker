@@ -31,8 +31,7 @@ type ParsedHand struct {
 	FiveCards ParsedFiveCards
 }
 
-func (h *Hand) GetBestHand (board Board) ParsedHand {
-	
+func (h *Hand) GetBestHand (board Board) ParsedHand {		
 	hands := []ParsedFiveCards{}
 	
 	triples := board.GetAllTriples();

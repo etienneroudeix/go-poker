@@ -9,15 +9,16 @@ var (
 )
 
 func TestCheckIntegrity(t *testing.T) {
-	board := Model.Board{
-		[3]Model.Card{
-			Model.MakeCard(Model.COLOR_HEART, 10),
-			Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
-			Model.MakeCard(Model.COLOR_HEART, 9),
-		},
-		Model.MakeCard(Model.COLOR_DIAMOND, 5),
-		Model.MakeCard(Model.COLOR_DIAMOND, 6),
-	}
+	var board Model.Board
+
+	board.SetFlop([3]Model.Card{
+		Model.MakeCard(Model.COLOR_HEART, 10),
+	   	Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
+	   	Model.MakeCard(Model.COLOR_HEART, 9),
+	})
+
+	board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
+	board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 5))
 
 	hands := []Model.Hand{
 		{
@@ -33,15 +34,16 @@ func TestCheckIntegrity(t *testing.T) {
 }
 
 func TestCheckIntegrityFailure(t *testing.T) {
-	board := Model.Board{
-		[3]Model.Card{
-			Model.MakeCard(Model.COLOR_HEART, 10),
-			Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
-			Model.MakeCard(Model.COLOR_HEART, 9),
-		},
-		Model.MakeCard(Model.COLOR_DIAMOND, 5),
-		Model.MakeCard(Model.COLOR_DIAMOND, 6),
-	}
+	var board Model.Board
+
+	board.SetFlop([3]Model.Card{
+		Model.MakeCard(Model.COLOR_HEART, 10),
+	   	Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
+	   	Model.MakeCard(Model.COLOR_HEART, 9),
+	})
+
+	board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
+	board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 5))
 
 	hands := []Model.Hand{
 		{

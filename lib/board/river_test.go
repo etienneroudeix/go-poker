@@ -6,15 +6,16 @@ import (
 )
 
 func TestResolveRiver (t *testing.T) {
-	board := Model.Board{
-		[3]Model.Card{
-			Model.MakeCard(Model.COLOR_HEART, 10),
-			Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
-			Model.MakeCard(Model.COLOR_HEART, 9),
-		},
-		Model.MakeCard(Model.COLOR_DIAMOND, 10),
-		Model.MakeCard(Model.COLOR_DIAMOND, 6),
-	}
+	var board Model.Board
+
+	board.SetFlop([3]Model.Card{
+		Model.MakeCard(Model.COLOR_HEART, 10),
+	   	Model.MakeCard(Model.COLOR_HEART, Model.VALUE_JACK),
+	   	Model.MakeCard(Model.COLOR_HEART, 9),
+	})
+
+	board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
+	board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 10))
 
 	hands := []Model.Hand{
 		{
