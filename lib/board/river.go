@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"sort"
 	"poker/model"
+	"poker/lib/deck"
 )
 
 var (
 )
 
-func ResolveRiver (board Model.Board, hands []Model.Hand) {
-	//checkIntegrity(board, hands)
-	
-	fmt.Println("Resolving")
+func ResolveRiver (board Model.Board, hands []Model.Hand) Model.ParsedHand {
+	Deck.CheckIntegrity(board, hands)
 	
 	bestHands := []Model.ParsedHand{}
 
@@ -26,5 +25,5 @@ func ResolveRiver (board Model.Board, hands []Model.Hand) {
 		return bestHands[i].FiveCards.Compare(bestHands[j].FiveCards)
 	})
 
-	fmt.Println("Winner : ", bestHands[0].Hand.Player, "with", bestHands[0].FiveCards)
+	return bestHands[0]
 }
