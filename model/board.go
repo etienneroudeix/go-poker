@@ -2,6 +2,7 @@ package Model
 
 import (
 	"fmt"
+	"sort"
 )
 
 const BOARD_STATE_PREFLOP = 0
@@ -107,3 +108,42 @@ func (b *Board) GetAllTriples () [][3]Card {
 	return combinaisons
 }
 
+func (board *Board) CheckIntegrity(hands []Hand) {
+	fmt.Println("Checking integrity")
+
+	deck := make([]int, 52, 52)
+
+	cards := board.GetAll()
+	for _, hand := range hands {
+		cards = append(cards, hand.Cards[0:2]...)
+	}
+
+	for _, card := range cards {
+		if deck[card.GetDeckValue()] > 0 {
+			panic(fmt.Sprintf("Deck integrity compromised : %d", card.GetDeckValue()))
+		}
+		deck[card.GetDeckValue()]++
+	}
+}
+
+func (board *Board) GetWinner (hands []Hand) ParsedHand {
+	if (board.GetState() != BOARD_STATE_RIVER) {
+		panic (fmt.Sprintf("State must be river, %d found", board.GetState()))
+	}
+
+	board.CheckIntegrity(hands)
+
+	bestHands := []ParsedHand{}
+
+	for _, hand := range hands {
+		fmt.Printf("%s best hand : \n", hand.Player)
+
+		bestHands = append(bestHands, hand.GetBestHand(*board))
+	}
+
+	sort.SliceStable(bestHands, func(i, j int) bool {
+		return bestHands[i].FiveCards.Compare(bestHands[j].FiveCards)
+	})
+
+	return bestHands[0]
+}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"poker/lib/board"
 	"poker/model"
 )
 
@@ -21,7 +20,7 @@ func main () {
 	})
 
 	board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
-	//board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 10))
+	board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 10))
 
 	hands := []Model.Hand{
 		{
@@ -40,5 +39,5 @@ func main () {
 		},
 	}
 
-	Board.EvaluateTurn(board, hands)
+	board.GetWinner(hands)
 }

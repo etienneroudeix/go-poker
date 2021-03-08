@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 	"poker/model"
-	"poker/lib/deck"
 )
 
 var (
@@ -15,7 +14,7 @@ func EvaluateTurn (board Model.Board, hands []Model.Hand) []Model.Evaluation {
 		panic (fmt.Sprintf("State must be turn, %d found", board.GetState()))
 	}
 	
-	Deck.CheckIntegrity(board, hands)
+	//Deck.CheckIntegrity(board, hands)
 
 	bestHands := []Model.ParsedHand{}
 
