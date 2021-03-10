@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"fmt"
 	"poker/model"
 )
 
@@ -9,7 +10,7 @@ var (
 )
 
 func main () {
-	log.Println("Test Draw")
+	log.Println("Get improving cards")
 
 	var board Model.Board
 
@@ -19,10 +20,10 @@ func main () {
 	   	Model.MakeCard(Model.COLOR_HEART, 9),
 	})
 
-	board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
-	board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 10))
+	//board.SetTurn(Model.MakeCard(Model.COLOR_DIAMOND, 6))
+	//board.SetRiver(Model.MakeCard(Model.COLOR_DIAMOND, 10))
 
-	hands := []Model.Hand{
+	/*hands := []Model.Hand{
 		{
 			"4x",
 			[2]Model.Card{
@@ -37,7 +38,17 @@ func main () {
 				Model.MakeCard(Model.COLOR_SPADE, 3),
 			},
 		},
+	}*/
+
+	hand := Model.Hand{
+		"4x",
+		[2]Model.Card{
+			Model.MakeCard(Model.COLOR_CLOVER, 8), 
+			Model.MakeCard(Model.COLOR_SPADE, 2),
+		},
 	}
 
-	board.GetWinner(hands)
+	ic := hand.GetImprovingCards(board, Model.RANK_PAIR)
+
+	fmt.Println(len(ic), ic)
 }

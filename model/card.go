@@ -32,6 +32,20 @@ func MakeCard(color int, value int) Card {
     return Card{color, value}
 }
 
+func MakeCardFromDeckValue(deckValue int) Card {
+	
+	//deckValue = card.Value -2 + card.Color * 13
+
+	var color int
+	for color = 0; color < 3; color ++ {
+		if (color+1) * 13 >  deckValue {
+			break;
+		}
+	}
+	
+    return Card{color, deckValue - (color * 13) + 2}
+}
+
 func (card *Card) GetDeckValue () int {
 	return card.Value -2 + card.Color * 13
 }

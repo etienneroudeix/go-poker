@@ -45,3 +45,43 @@ func TestGetDeckValue(t *testing.T) {
 		t.Errorf(msg, 18, card.GetDeckValue())
 	}
 }
+
+func TestMakeCardFromDeckValue(t *testing.T) {
+	
+	var card Card
+
+	card = MakeCardFromDeckValue(0)
+	if card.Color != COLOR_HEART || card.Value != 2 {
+		t.Error("Failed 0")
+	}
+
+	card = MakeCardFromDeckValue(13)
+	if card.Color != COLOR_CLOVER || card.Value != 2 {
+		t.Errorf("Failed 13")
+	}
+
+	card = MakeCardFromDeckValue(26)
+	if card.Color != COLOR_DIAMOND || card.Value != 2 {
+		t.Error("Failed 26")
+	}
+
+	card = MakeCardFromDeckValue(39)
+	if card.Color != COLOR_SPADE || card.Value != 2 {
+		t.Error("Failed 39")
+	}
+
+	card = MakeCardFromDeckValue(51)
+	if card.Color != COLOR_SPADE || card.Value != VALUE_ACE {
+		t.Error("Failed 51")
+	}
+
+	card = MakeCardFromDeckValue(9)
+	if card.Color != COLOR_HEART || card.Value != VALUE_JACK {
+		t.Error("Failed 51")
+	}
+
+	card = MakeCardFromDeckValue(18)
+	if card.Color != COLOR_CLOVER || card.Value != 7 {
+		t.Error("Failed 51")
+	}
+}

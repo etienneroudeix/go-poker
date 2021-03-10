@@ -16,6 +16,20 @@ type Board struct {
 	River *Card
 }
 
+func (b *Board) Has (cardDeckValue int) bool {
+	for _, card := range b.Flop {
+		if card.GetDeckValue() == cardDeckValue {
+			return true
+		}
+	 }
+	 
+	 if (b.Turn != nil && b.Turn.GetDeckValue() == cardDeckValue) || (b.River != nil && b.River.GetDeckValue() == cardDeckValue) {
+		 return true
+	 }
+
+	return false;
+}
+
 func (b *Board) GetState () int {
 	if b.River != nil {
 		return BOARD_STATE_RIVER
@@ -126,8 +140,43 @@ func (board *Board) CheckIntegrity(hands []Hand) {
 	}
 }
 
+/*func (board *Board) EvaluateTurn (hands []Hand) []Evaluation {
+	if (board.GetState() != BOARD_STATE_TURN) {
+		panic (fmt.Sprintf("State must be turn, %d found", board.GetState()))
+	}
+	
+	board.CheckIntegrity(hands)
+
+	bestHands := []ParsedHand{}
+
+	for i := 0; i < 52; i++ {
+		
+	}
+
+	cards := board.GetAll()
+	for i, card := range deck {
+		cards = append(cards, hand.Cards[0:2]...)
+	}
+
+	for _, hand := range hands {
+		fmt.Printf("%s get outs :\n", hand.Player)
+
+		bestHands = append(bestHands, hand.GetBestHand(*board))			
+	}
+
+	sort.SliceStable(bestHands, func(i, j int) bool {
+		return bestHands[i].FiveCards.Compare(bestHands[j].FiveCards)
+	})
+
+	evaluations := []Evaluation{}
+
+	// ...
+
+	return evaluations
+}*/
+
 func (board *Board) GetWinner (hands []Hand) ParsedHand {
-	if (board.GetState() != BOARD_STATE_RIVER) {
+	if board.GetState() != BOARD_STATE_RIVER {
 		panic (fmt.Sprintf("State must be river, %d found", board.GetState()))
 	}
 
