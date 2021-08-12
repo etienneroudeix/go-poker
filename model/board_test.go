@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	test = true
 )
 
 func TestGetAllTriples(t *testing.T) {
